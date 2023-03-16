@@ -1,14 +1,12 @@
 package com.example.justtest.web.controller;
-
-import com.dcits.dcwlt.common.core.constant.HttpStatus;
-import com.dcits.dcwlt.common.core.utils.DateUtils;
-import com.dcits.dcwlt.common.core.utils.StringUtils;
-import com.dcits.dcwlt.common.core.utils.sql.SqlUtil;
-import com.dcits.dcwlt.common.core.web.domain.AjaxResult;
-import com.dcits.dcwlt.common.core.web.page.PageDomain;
-import com.dcits.dcwlt.common.core.web.page.TableDataInfo;
-import com.dcits.dcwlt.common.core.web.page.TableSupport;
+import com.example.justtest.constant.HttpStatus;
+import com.example.justtest.utils.DateUtils;
+import com.example.justtest.utils.StringUtils;
+import com.example.justtest.utils.sql.SqlUtil;
+import com.example.justtest.web.domain.AjaxResult;
 import com.example.justtest.web.page.PageDomain;
+import com.example.justtest.web.page.TableDataInfo;
+import com.example.justtest.web.page.TableSupport;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.slf4j.Logger;

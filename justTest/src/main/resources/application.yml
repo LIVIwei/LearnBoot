@@ -13,10 +13,16 @@ spring:
 server:
   port: 8088
 
-
+# mybatis 相关配置
 mybatis:
+  #... 其他配置信息
+  configuration-properties:
+    offsetAsPageNum: true
+    rowBoundsWithCount: true
+    reasonable: true
   mapper-locations: classpath:mappering/*Mapper.xml
   type-aliases-package: com.example.entity
+
 #showSql
 logging:
   level:
