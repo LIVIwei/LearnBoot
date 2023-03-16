@@ -15,7 +15,7 @@ server:
 
 
 mybatis:
-  mapper-locations: classpath:mapping/*Mapper.xml
+  mapper-locations: classpath:mappering/*Mapper.xml
   type-aliases-package: com.example.entity
 #showSql
 logging:
