@@ -1,11 +1,9 @@
 package com.example.justtest.service;
 
 
-import com.dcits.dcwlt.pay.api.model.CheckPathDO;
-import com.dcits.dcwlt.pay.api.model.CheckPathDetialDO;
-import com.dcits.dcwlt.pay.api.model.CheckResultDO;
-import com.dcits.dcwlt.pay.api.model.OfficialCheckCollectDO;
+import com.example.justtest.domain.CheckPathDO;
 import com.example.justtest.domain.CheckPathDetialDO;
+import com.example.justtest.domain.CheckResultDO;
 import com.example.justtest.domain.OfficialCheckCollectDO;
 
 import java.util.List;

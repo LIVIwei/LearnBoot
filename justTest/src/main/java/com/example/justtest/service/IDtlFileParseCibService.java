@@ -1,7 +1,11 @@
 package com.example.justtest.service;
 
 
+import com.example.justtest.domain.CheckPathDetialDO;
+import com.example.justtest.domain.DtlFileInfDOPerson;
+
 import java.io.IOException;
+import java.util.List;
 
 /**
  * 兴业对账文件解压解析

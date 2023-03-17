@@ -1,6 +1,6 @@
 package com.example.justtest.web.page;
 
-import com.dcits.dcwlt.common.core.utils.StringUtils;
+import com.example.justtest.utils.StringUtils;
 
 /**
  * 分页数据

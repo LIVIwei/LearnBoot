@@ -1,7 +1,7 @@
 package com.example.justtest.web.domain;
 
-import com.dcits.dcwlt.common.core.constant.HttpStatus;
-import com.dcits.dcwlt.common.core.utils.StringUtils;
+import com.example.justtest.constant.HttpStatus;
+import com.example.justtest.utils.StringUtils;
 
 import java.util.HashMap;
 

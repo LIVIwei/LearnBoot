@@ -1,6 +1,6 @@
 package com.example.justtest.web.domain;
 
-import com.dcits.dcwlt.common.core.annotation.Excel;
+import com.example.justtest.annotation.Excel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.io.Serializable;

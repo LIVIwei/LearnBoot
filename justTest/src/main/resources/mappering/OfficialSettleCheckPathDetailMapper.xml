@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.justtest.mapper.OfficialSettleCheckPathDetailMapper">
+    <!--对公通道对账明细表入库-->
+    <insert id="insert" parameterType="com.example.justtest.domain.CheckPathDetialDO">
+        INSERT INTO OFFICIAL_BATCH_CHECKPATHDTL
+        (WORKDATE, MSGID, BATCHID, FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
+        DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
+        PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME,DBITCASHBOXPARTY,CRDTCASHBOXPARTY, PAYERWALLETID)
+        VALUES(#{workdate}, #{msgId}, #{batchId}, #{fileName}, #{dtlBizTime}, #{msgType},
+        #{dtlMsgId}, #{instgDrctPty}, #{dBITParty}, #{crdtParty}, #{ccy}, #{amount}, #{dtlBizStatus},
+        #{dtlDesc}, #{payeeName}, #{payeeAccount}, #{payeeWalletId}, #{payerAccount}, #{ognlMsgType},
+        #{ognlMsgId}, #{checkStatus}, #{lastUpDate}, #{lastUpTime},#{dbitCashBoxParty}, #{crdtCashBoxParty}, #{payerWalletId})
+    </insert>
+	
+	<!--对公通道对账明细表入库-->
+    <insert id="insertByBatch" parameterType="java.util.List">
+        INSERT INTO OFFICIAL_BATCH_CHECKPATHDTL
+        (WORKDATE, MSGID, BATCHID, FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
+        DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
+        PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME,DBITCASHBOXPARTY,CRDTCASHBOXPARTY, PAYERWALLETID)
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+         SELECT
+        #{item.workdate}, #{item.msgId}, #{item.batchId}, #{item.fileName}, #{item.dtlBizTime}, #{item.msgType},
+        #{item.dtlMsgId}, #{item.instgDrctPty}, #{item.dBITParty}, #{item.cRDTParty}, #{item.ccy}, #{item.amount}, #{item.dtlBizStatus},
+        #{item.dtlDesc}, #{item.payeeName}, #{item.payeeAccount}, #{item.payeeWalletId}, #{item.payerAccount}, #{item.ognlMsgType},
+        #{item.ognlMsgId}, #{item.checkStatus}, #{item.lastUpDate}, #{item.lastUpTime} , #{item.dbitCashBoxParty},#{item.crdtCashBoxParty,
+        #{item.payerWalletId}}
+         from dual
+        </foreach>
+    </insert>
+    
+    <!--对公通道对账明细表入库-->
+    <insert id="replace" parameterType="java.util.List">
+
+        begin
+        <foreach collection="list" item="item" index= "index" separator =";">
+        MERGE INTO OFFICIAL_BATCH_CHECKPATHDTL t1
+        <!--如果全部重头开始重复执行同一天 msgid 会不同，但 交易流水dtlmsgid一样，会重复记录-->
+       <!--  using (SELECT #{item.msgId} msgid ,#{item.dtlMsgId} dtlmsgid FROM dual) t2
+            on ( t1.msgid = t2.msgid and t1.dtlmsgid = t2.dtlmsgid )-->
+            using (SELECT #{item.dtlMsgId} dtlmsgid FROM dual) t2
+            on ( t1.dtlmsgid = t2.dtlmsgid )
+        WHEN MATCHED THEN
+            UPDATE SET
+                WORKDATE = #{item.workdate},FILENAME = #{item.fileName},MSGTYPE = #{item.msgType},
+                INSTGDRCTPTY = #{item.instgDrctPty},DBITPARTY = #{item.dBITParty},CRDTPARTY = #{item.cRDTParty},
+                CHECKSTATUS = #{item.checkStatus}, LASTUPDATE = #{item.lastUpDate}, LASTUPTIME = #{item.lastUpTime},
+                DBITCASHBOXPARTY =  #{item.dbitCashBoxParty},CRDTCASHBOXPARTY = #{item.crdtCashBoxParty}
+                ,MSGID = #{item.msgId},PAYERWALLETID = #{item.payerWalletId},BATCHID = #{item.batchId}
+           <!--  WHERE MSGID = #{item.msgId}
+            AND DTLMSGID = #{item.dtlMsgId} -->
+            WHERE  DTLMSGID = #{item.dtlMsgId} and CHECKSTATUS != 'SAME'<!--重对账会重置后一天的对账结果，所以如果检查是对平的不用修改为初始化状态-->
+        WHEN NOT MATCHED THEN
+            INSERT (WORKDATE, MSGID, BATCHID,  FILENAME, DTLBIZTIME, MSGTYPE, DTLMSGID, INSTGDRCTPTY,
+                DBITPARTY, CRDTPARTY, CCY, AMOUNT, DTLBIZSTATUS, DTLDESC, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID,
+                PAYERACCOUNT, OGNLMSGTYPE, OGNLMSGID, CHECKSTATUS, LASTUPDATE, LASTUPTIME,DBITCASHBOXPARTY,CRDTCASHBOXPARTY,PAYERWALLETID)
+            VALUES(
+                #{item.workdate},
+                #{item.msgId},
+                #{item.batchId},
+                #{item.fileName},
+                #{item.dtlBizTime},
+                #{item.msgType},
+                #{item.dtlMsgId},
+                #{item.instgDrctPty},
+                #{item.dBITParty},
+                #{item.cRDTParty},
+                #{item.ccy},
+                #{item.amount},
+                #{item.dtlBizStatus},
+                #{item.dtlDesc},
+                #{item.payeeName},
+                #{item.payeeAccount},
+                #{item.payeeWalletId},
+                #{item.payerAccount},
+                #{item.ognlMsgType},
+                #{item.ognlMsgId},
+                #{item.checkStatus},
+                #{item.lastUpDate},
+                #{item.lastUpTime},
+                #{item.dbitCashBoxParty},
+                #{item.crdtCashBoxParty},
+                #{item.payerWalletId}
+            )
+        </foreach>
+        ;end;
+    </insert>
+
+    <!-- 对公查询通道对账明细表 -->
+    <select id ="selectPathDetail" resultType="com.example.justtest.domain.CheckPathDetialDO">
+        SELECT t.WORKDATE  workdate,
+        t.MSGID     msgId,
+        t.BATCHID    batchId,
+        t.FILENAME    fileName,
+        t.DTLBIZTIME   dtlBizTime,
+        t.MSGTYPE    msgType,
+        t.DTLMSGID    dtlMsgId,
+        t.INSTGDRCTPTY      instgDrctPty,
+        t.DBITPARTY    dBITParty,
+        t.CRDTPARTY    cRDTParty,
+        t.CCY     ccy,
+        t.AMOUNT    amount,
+        t.DTLBIZSTATUS      dtlBizStatus,
+        t.DTLDESC    dtlDesc,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT      payeeAccount,
+        t.PAYEEWALLETID      payeeWalletId,
+        t.PAYERACCOUNT      payerAccount,
+        t.PAYERWALLETID      payerWalletId,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.CHECKSTATUS   checkStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM OFFICIAL_BATCH_CHECKPATHDTL t
+        where 1=1
+        <if test="workdate != null and  workdate != ''">
+           AND t.WORKDATE = #{workdate}
+        </if>
+
+        <if test="crdtParty != null and  crdtParty != ''">
+            AND t.CRDTPARTY = #{crdtParty}
+        </if>
+        <if test="checkstatus != null and  checkstatus != ''">
+            AND t.CHECKSTATUS !=#{checkstatus}
+        </if>
+        ORDER BY T.DTLBIZTIME
+    </select>
+
+    <!-- 对公查询通道对账明细表 -->
+    <select id ="selectPathDetailCore" resultType="com.example.justtest.domain.CheckPathDetialDO">
+        SELECT p.TXN_DATE  workdate,
+        p.MSG_ID     msgId,
+        p.BATCH_ID    BATCHID,
+        p.INSTD_PARTY crdtparty,
+        t.FILENAME    fileName,
+        t.DTLBIZTIME   dtlBizTime,
+        p.TXN_TYPE    msgType,
+        t.DTLMSGID    dtlMsgId,
+        p.INSTG_PARTY      instgDrctPty,
+        p.PAYER_ACCT_PARTY_ID    dBITParty,
+
+        p.CURR_TYPE     ccy,
+        p.AMOUNT    amount,
+        nvl(DTLBIZSTATUS,case when p.TRX_STATUS = '1' then 'PR00' when p.TRX_STATUS = '0' then 'PR01' end) dtlBizStatus,
+        t.DTLDESC    dtlDesc,
+        p.PAYEE_ACCT_NAME    payeeName,
+        p.PAYEE_ACCT_ID   payeeAccount,
+
+        p.PAYER_ACCT_NAME    payerName,
+        p.PAYER_ACCT_ID   payerAccount,
+
+        p.PAYER_WALLET_ID payerWalletId,
+        p.PAYEE_WALLET_ID  payeeWalletId,
+        <!--         p.INNERACCTID    innerAcctId,//核心账号
+        p.DIRECT      direct,//业务方向 -->
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        <!--对账明细表没有即失败，金融登记簿业务状态失败 对平-->
+       <!-- nvl(t.CHECKSTATUS, case when p.TRX_STATUS = 'B' then '' else 'MORE' end) checkStatus,-->
+       <!-- 运营机构没有，金融登记簿交易状态是0或3或297也是对平的-->
+        nvl(t.CHECKSTATUS, case when (t.DTLMSGID is null and (p.TRX_STATUS = '0' or p.TRX_STATUS = '3' or (p.TRX_STATUS = '2' and p.CORE_STATUS = '9' and p.PATH_STATUS = '7'))) then 'SAME'  when p.TRX_STATUS = 'B' then '' else 'MORE' end) checkStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime,
+        p.CORE_RSP_SERNO  coreserno
+        FROM OFFICIAL_BATCH_CHECKPATHDTL t, OFFICIAL_WALLET_FINANCE_DTL p
+        where p.PATH_REQ_SERNO = t.DTLMSGID(+)
+
+        <if test="startworkdate != null and  startworkdate != ''">
+            <![CDATA[AND p.TXN_DATE >= #{startworkdate}]]>
+        </if>
+        <if test="endworkdate != null and  endworkdate != ''">
+            <![CDATA[ AND p.TXN_DATE <= #{endworkdate}]]>
+        </if>
+
+        <if test="crdtParty != null and  crdtParty != ''">
+            and t.CRDTPARTY=#{crdtParty}
+        </if>
+        <if test="msgId != null and  msgId != ''">
+            AND p.PATH_REQ_SERNO like concat(concat('%', #{msgId}), '%')
+        </if>
+        <if test="checkstatus != null and  checkstatus != ''">
+            AND t.CHECKSTATUS =#{checkstatus}
+        </if>
+        <if test="coreserno != null and  coreserno != ''">
+            AND p.CORE_RSP_SERNO like concat(concat('%', #{coreserno}), '%')
+        </if>
+        and p.TXN_TYPE in ('TO','TI')
+        ORDER BY T.DTLBIZTIME
+    </select>
+    
+    <update id="updateStatus">
+        UPDATE OFFICIAL_BATCH_CHECKPATHDTL
+        SET CHECKSTATUS = #{checkStatus}, LASTUPDATE = #{lastUpDate}, LASTUPTIME = #{lastUpTime}
+        WHERE MSGID = #{msgId}
+        AND DTLMSGID = #{dtlMsgId}
+    </update>
+    
+    <!-- 对公统计当前批次两方都存在的情况下需要对账的总数 -->
+    <select id="selectCheckDetailCount" resultType="int">
+    	select  count(1) from OFFICIAL_BATCH_CHECKPATHDTL a 
+		inner join OFFICIAL_BATCH_CHECKCOLLECT b 
+		on a.CRDTPARTY=b.CRDTPARTY
+		 and a.DTLMSGID = b.MSGID
+		where a.WORKDATE = #{workdate}
+           and a.CRDTPARTY = #{crdtParty}
+		   and a.CHECKSTATUS = 'INIT'
+    </select>
+    
+    <!-- 对公勾兑交行对账文件明细和我行的对账明细，不限制更新的条数 -->
+    <update id="updateCheckStatusForMsgMatchWithoutLimit">
+    	update OFFICIAL_BATCH_CHECKPATHDTL a
+        set a.CHECKSTATUS = (
+        case when exists (select b.AMOUNT from OFFICIAL_BATCH_CHECKCOLLECT b where
+        a.CRDTPARTY = b.CRDTPARTY and  a.WORKDATE = b.PAYDATE
+        and a.DTLMSGID = b.MSGID
+        <!--登记簿金额格式不固定，有的有小数点，有的没有；对账文件都是有的-->
+        <!--and a.AMOUNT = b.AMOUNT-->
+        )  then
+        case when a.DTLBIZSTATUS in ('PR00', 'PR03')  then         /*交行对账文件明细交易成功*/
+        case when exists (select b.TRADESTATUS from OFFICIAL_BATCH_CHECKCOLLECT b where b.TRADESTATUS in ('1', 'A') and
+
+        a.CRDTPARTY = b.CRDTPARTY and  a.WORKDATE = b.PAYDATE
+        and a.DTLMSGID = b.MSGID ) then 'SAME'  /*-我行成功*/
+        when exists (select b.TRADESTATUS from OFFICIAL_BATCH_CHECKCOLLECT b where b.TRADESTATUS in ('0', '3') and
+
+        a.CRDTPARTY = b.CRDTPARTY and  a.WORKDATE = b.PAYDATE
+        and a.DTLMSGID = b.MSGID ) then 'FANS'  /*我行失败*/
+        else 'EANS'                                   /*我行异常*/
+        end
+        when a.DTLBIZSTATUS in ('PR01', 'PR04') then          /*交行对账文件明细交易失败 不会存在交易*/
+        case when exists (select b.TRADESTATUS from OFFICIAL_BATCH_CHECKCOLLECT b where b.TRADESTATUS in ('1', 'A') and
+
+        a.CRDTPARTY = b.CRDTPARTY and  a.WORKDATE = b.PAYDATE
+        and a.DTLMSGID = b.MSGID )  then 'SANF'  /*我行成功*/
+        when exists (select b.TRADESTATUS from OFFICIAL_BATCH_CHECKCOLLECT b where b.TRADESTATUS in ('0', '3', 'B') and
+
+        a.CRDTPARTY = b.CRDTPARTY and  a.WORKDATE = b.PAYDATE
+        and a.DTLMSGID = b.MSGID )  then 'SAME'  /*我行失败*/
+        else 'EANF'                                   /*我行异常*/
+        end
+        else 'PROC'                                           /*交行对账文件明细交易处理中*/
+        end
+        else 'DIFF'
+        end
+        )
+        where a.WORKDATE = #{workdate}
+        and
+        a.CRDTPARTY=#{crdtParty}
+        <if test="list == null">
+          and a.CHECKSTATUS = 'INIT'
+        </if>
+        <if test="list != null">
+             and a.DTLMSGID in
+            <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+</update>
+
+    <!-- 对公勾兑交行对账文件明细和我行的对账明细，限制每次更新的条数 -->
+    <update id="updateCheckStatusForMsgMatchWithLimit">
+        update OFFICIAL_BATCH_CHECKPATHDTL a
+                     set a.CHECKSTATUS = (
+                                         select  case when b.TRADESTATUS in ('1', 'A') then 'SAME'  /*-数币成功*/
+                                                 when b.TRADESTATUS = '0' then 'FANS'  /*数币失败*/
+                                                 else 'EANS'                          /*数币异常*/
+                                                 end
+
+                                            from OFFICIAL_BATCH_CHECKCOLLECT b
+                                             where a.CRDTPARTY = b.CRDTPARTY and  a.WORKDATE = b.PAYDATE
+                                                   and a.DTLMSGID = b.MSGID
+                                         )
+
+        where exists(
+                     select 1 from OFFICIAL_BATCH_CHECKCOLLECT c
+                           where a.CRDTPARTY = c.CRDTPARTY and  a.WORKDATE = c.PAYDATE and a.DTLMSGID = c.MSGID and
+                                 a.WORKDATE = #{workdate} and a.CRDTPARTY = #{crdtParty} and a.CHECKSTATUS = 'INIT'
+                     )
+               <if test="updateNumber != null and updateNumber !='' ">
+                   and rownum <![CDATA[ <= ]]> #{updateNumber}
+               </if>
+    </update>
+    
+    <!-- 对公查找当前日期下，给定的批次号中人行有数据，但我行没有的明细数据的总数 -->
+    <select id ="selectPathDetailWhitCgbNotFoundCount" resultType="int">
+        SELECT count(*)
+        FROM OFFICIAL_BATCH_CHECKPATHDTL t 
+        left join OFFICIAL_BATCH_CHECKCOLLECT b 
+    		on
+    		t.CRDTPARTY = b.CRDTPARTY and  t.WORKDATE = b.PAYDATE
+    		and t.DTLMSGID = b.MSGID
+        where t.WORKDATE = #{workdate} AND
+        t.CRDTPARTY=#{crdtParty}
+        and b.MSGID is null
+         
+     </select>
+     
+    <!-- 对公查询通道对账明细表 -->
+    <select id ="selectPathDetailWhitCgbNotFound" resultType="com.example.justtest.domain.CheckPathDetialDO">
+        SELECT * from
+        (SELECT
+        t.WORKDATE workdate,
+        t.MSGID msgId,
+        t.BATCHID batchId,
+        t.FILENAME fileName,
+        t.DTLBIZTIME dtlBizTime,
+        t.MSGTYPE msgType,
+        t.DTLMSGID dtlMsgId,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.DBITPARTY dBITParty,
+        t.CRDTPARTY cRDTParty,
+        t.CCY ccy,
+        t.AMOUNT amount,
+        t.DTLBIZSTATUS dtlBizStatus,
+        t.DTLDESC dtlDesc,
+        t.PAYEENAME payeeName,
+        t.PAYEEACCOUNT payeeAccount,
+        t.PAYEEWALLETID payeeWalletId,
+        t.PAYERACCOUNT payerAccount,
+        t.PAYERWALLETID payerWalletId,
+        t.OGNLMSGTYPE ognlMsgType,
+        t.OGNLMSGID ognlMsgId,
+        t.CHECKSTATUS checkStatus,
+        t.LASTUPDATE lastUpDate,
+        t.LASTUPTIME lastUpTime,
+        ROWNUM num
+        FROM OFFICIAL_BATCH_CHECKPATHDTL t
+        left join OFFICIAL_BATCH_CHECKCOLLECT b
+        on
+        t.CRDTPARTY = b.CRDTPARTY and t.WORKDATE = b.PAYDATE
+        and t.DTLMSGID = b.MSGID
+        where t.WORKDATE = #{workdate} AND
+        t.CRDTPARTY=#{crdtParty}
+        and b.MSGID is null
+        order by t.DTLMSGID) m
+        <if test="start != null and start != ''">
+            <![CDATA[where m.num > #{start} ]]>
+        </if>
+        <if test="end != null and end != ''">
+            <![CDATA[AND m.num <= #{end} ]]>
+        </if>
+        <!--
+        <if test="limit != null">
+        	<if test="offset != null">
+        		limit #{offset}, #{limit}
+        	</if>
+        	<if test="offset == null">
+        		limit #{limit}
+        	</if>
+        </if>
+        -->
+     </select>
+
+
+    <!-- 对公查询通道对账明细表 -->
+    <select id ="querySingle" resultType="com.example.justtest.domain.CheckPathDetialDO">
+        SELECT t.WORKDATE  workdate,
+        t.MSGID     msgId,
+        t.BATCHID    batchId,
+        t.FILENAME    fileName,
+        t.DTLBIZTIME   dtlBizTime,
+        t.MSGTYPE    msgType,
+        t.DTLMSGID    dtlMsgId,
+        t.INSTGDRCTPTY      instgDrctPty,
+        t.DBITPARTY    dBITParty,
+        t.CRDTPARTY    cRDTParty,
+        t.CCY     ccy,
+        t.AMOUNT    amount,
+        t.DTLBIZSTATUS      dtlBizStatus,
+        t.DTLDESC    dtlDesc,
+        t.PAYEENAME    payeeName,
+        t.PAYEEACCOUNT      payeeAccount,
+        t.PAYEEWALLETID      payeeWalletId,
+        t.PAYERACCOUNT      payerAccount,
+        t.PAYERWALLETID payerWalletId,
+        t.OGNLMSGTYPE   ognlMsgType,
+        t.OGNLMSGID    ognlMsgId,
+        t.CHECKSTATUS   checkStatus,
+        t.LASTUPDATE   lastUpDate,
+        t.LASTUPTIME   lastUpTime
+        FROM OFFICIAL_BATCH_CHECKPATHDTL t
+        where t.MSGID = #{msgId}
+        AND t.DTLMSGID = #{dtlmsgId}
+    </select>
+
+    <!--删除交易记录中钱包ID不是对公钱包的记录 -->
+    <delete id="deleteWalletNotExists">
+        delete from OFFICIAL_BATCH_CHECKPATHDTL a where a.BATCHID = #{batchId} and a.crdtparty = #{crdtParty}
+        and a.checkstatus = 'INIT'
+        and not exists (select 1 from OFFICIAL_WALLET_INFO b where b.wallet_id = a.payeewalletid or b.wallet_id = a.payerwalletid)
+    </delete>
+</mapper>

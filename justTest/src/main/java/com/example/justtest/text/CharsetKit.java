@@ -1,6 +1,6 @@
 package com.example.justtest.text;
 
-import com.dcits.dcwlt.common.core.utils.StringUtils;
+import com.example.justtest.utils.StringUtils;
 
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;

@@ -1,6 +1,6 @@
 package com.example.justtest.text;
 
-import com.dcits.dcwlt.common.core.exception.UtilException;
+import cn.hutool.core.exceptions.UtilException;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

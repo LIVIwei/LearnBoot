@@ -1,6 +1,6 @@
 package com.example.justtest.text;
 
-import com.dcits.dcwlt.common.core.utils.StringUtils;
+import com.example.justtest.utils.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
