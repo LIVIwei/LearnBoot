@@ -5,9 +5,11 @@ import com.example.justtest.domain.CheckPathDO;
 import com.example.justtest.domain.CheckPathDetialDO;
 import com.example.justtest.domain.CheckResultDO;
 import com.example.justtest.domain.OfficialCheckCollectDO;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface IOfficialCheckCollectService {
 
     /**

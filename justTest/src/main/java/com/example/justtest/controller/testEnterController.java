@@ -21,7 +21,7 @@ public class testEnterController extends BaseController {
     private ISettleTaskExecService execService;
     @GetMapping("/begin")
     public TableDataInfo carryForward(@RequestParam("settleDate") String settleDate) throws Exception {
-        String crdtparty= "1245212454121";
+        String crdtparty= "C1030935001347";
         execService.runTaskGroup(settleDate, crdtparty, null);
         return null;
     }

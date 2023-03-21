@@ -171,28 +171,7 @@ public class DtlFileParseServiceImpl implements IDtlFileParseCibService {
                  * */
                 //如果已经满(默认)1000， 可通过（limit配置）条数据，进行一次查库
                 if (count == limit){
-                    //解析完成后的list数据与officialCheckCollectDOS或CheckCollectDOS中的list数据进行msgId比对,相同的保存在(List<CheckPathDetialDO>)入库OFFICIAL_BATCH_CHECKPATHDTL / PAY_BATCH_CHECKPATHDTL
-                    // 用于存放结果的List
-                    List<CheckPathDetialDO> resultList = new ArrayList<>();
-                    // 用于存放officialCheckCollectDOS中所有msgId的Set
-                    Set<String> msgIdSet = new HashSet<>();
-
-                    // 先将officialCheckCollectDOS或CheckCollectDOS的所有msgId放入Set中
-                    for (CheckPathDetialDO checkCollectDOSdata : checkCollectDOS) {
-                        msgIdSet.add(checkCollectDOSdata.getMsgId());
-                    }
-
-                    // 遍历checkPathDetailDOS，如果msgId在Set中出现过，则将该数据放入resultList中
-                    for (CheckPathDetialDO checkPathDetailDOSdata : checkPathDetailDOS) {
-                        if (msgIdSet.contains(checkPathDetailDOSdata.getMsgId())) {
-                            resultList.add(checkPathDetailDOSdata);
-                        }
-                    }
-
-                    if(resultList.size()<1){
-                        throw new Exception("当前ListA没有对应记录");
-                    }
-
+                    List<CheckPathDetialDO> resultList = getListBdataSampleListA(checkPathDetailDOS,checkCollectDOS);
                     int replaceSum = 0;
                     replaceSum = officialCheckPathDetailService.replaceCheckPathDtl(resultList);
                     if (replaceSum != count) {
@@ -208,6 +187,14 @@ public class DtlFileParseServiceImpl implements IDtlFileParseCibService {
                     count = 0;
                 }
                 logger.debug("解析文件{}，解析入库{}条", dtlFileInfDOPerson.getFileName(), fileDataCount);
+
+                //避免最后一次统计无法入库
+                if (!checkPathDetailDOS.isEmpty()) {
+                    List<CheckPathDetialDO> resultList = getListBdataSampleListA(checkPathDetailDOS,checkCollectDOS);
+                    int replaceSum = 0;
+                    replaceSum = officialCheckPathDetailService.replaceCheckPathDtl(resultList);
+                    logger.info("日期：{}，文件{}当前完成处理{}条数据", dtlFileInfDOPerson.getBatchId(), dtlFileInfDOPerson.getFileName(), fileDataCount);
+                }
                 /**
                  * end
                  * */
@@ -216,8 +203,33 @@ public class DtlFileParseServiceImpl implements IDtlFileParseCibService {
         /**
          * End
          * */
-
     }
+
+    /**
+     * 获取ListA与ListB中数据mesgid相同的的listB数据入库
+     * */
+    List<CheckPathDetialDO> getListBdataSampleListA(List<CheckPathDetialDO> checkPathDetailDOS, List<CheckPathDetialDO> checkCollectDOS) throws Exception {
+        //解析完成后的list数据与officialCheckCollectDOS或CheckCollectDOS中的list数据进行msgId比对,相同的保存在(List<CheckPathDetialDO>)入库OFFICIAL_BATCH_CHECKPATHDTL / PAY_BATCH_CHECKPATHDTL
+        List<CheckPathDetialDO> resultList = new ArrayList<>(); // 用于存放结果的List
+        Set<String> msgIdSet = new HashSet<>(); // 用于存放officialCheckCollectDOS或CheckCollectDOS中所有msgId的Set
+
+        // 先将officialCheckCollectDOS或CheckCollectDOS的所有msgId放入Set中
+        for (CheckPathDetialDO checkCollectDOSdata : checkCollectDOS) {
+            msgIdSet.add(checkCollectDOSdata.getMsgId());
+        }
+
+        // 遍历checkPathDetailDOS，如果msgId在Set中出现过，则将该数据放入resultList中
+        for (CheckPathDetialDO checkPathDetailDOSdata : checkPathDetailDOS) {
+            if (msgIdSet.contains(checkPathDetailDOSdata.getMsgId())) {
+                resultList.add(checkPathDetailDOSdata);
+            }
+        }
+        if(resultList.size()<1){
+            throw new Exception("当前ListA没有对应记录");
+        }
+        return resultList;
+    }
+
 
     private CheckPathDetialDO createCheckPathDetialDo(String[] data, DtlFileInfDOPerson fileInfDOPerson) {
         CheckPathDetialDO checkPathDetialDO = new CheckPathDetialDO();

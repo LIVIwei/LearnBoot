@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.justtest.mapper.OfficialSettleCheckColectMapper">
+    <!--对账明细采集表入库-->
+    <insert id="insert" parameterType="com.example.justtest.domain.OfficialCheckCollectDO">
+        INSERT INTO OFFICIAL_BATCH_CHECKCOLLECT
+        (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
+        PAYERWALLETID, PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE,
+        OGNLMSGID, TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)
+        VALUES(#{payDate}, #{paySerno}, #{payTime}, #{coreAcctDate}, #{msgType}, #{msgId}, #{batchId}, #{payFlag},
+        #{instgDrctPty}, #{dBITParty}, #{payerWalletId}, #{payerAccount}, #{cRDTParty},
+        #{payeeName}, #{payeeAccount}, #{payeeWalletId}, #{ccy}, #{amount}, #{ognlMsgType},
+        #{ognlMsgId}, #{tradeStatus}, #{coreStatus}, #{pathStatus}, #{lastUpDate}, #{lastUpTime})
+    </insert>
+
+    <insert id="insertByBatch" parameterType="java.util.List">
+        INSERT INTO OFFICIAL_BATCH_CHECKCOLLECT
+        (PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
+        PAYERWALLETID,
+        PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE, OGNLMSGID,
+        TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)
+        <foreach collection="list" item="item" index="index" separator="UNION ALL">
+            select
+            #{item.payDate}, #{item.paySerno}, #{item.payTime}, #{item.coreAcctDate}, #{item.msgType}, #{item.msgId},
+            #{item.batchId}, #{item.payFlag}, #{item.instgDrctPty}, #{item.dBITParty}, #{item.payerWalletId},
+            #{item.payerAccount}, #{item.cRDTParty}, #{item.payeeName}, #{item.payeeAccount}, #{item.payeeWalletId},
+            #{item.ccy}, #{item.amount}, #{item.ognlMsgType}, #{item.ognlMsgId}, #{item.tradeStatus},
+            #{item.coreStatus},
+            #{item.pathStatus}, #{item.lastUpDate}, #{item.lastUpTime}
+            from DUAL
+        </foreach>
+    </insert>
+
+    <!--对账明细采集表入库使用replace方法-->
+    <insert id="replaceIntoBatch" parameterType="com.example.justtest.domain.OfficialCheckCollectDO">
+        MERGE INTO OFFICIAL_BATCH_CHECKCOLLECT t1
+        using (select #{payDate} as PAYDATE, #{paySerno} as PAYSERNO from dual) t2
+        on (t1.PAYDATE = t2.PAYDATE and t1.PAYSERNO = t2.PAYSERNO)
+        when matched then
+            update
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="payTime != null and payTime != ''">paytime = #{payTime},</if>
+                <if test="coreAcctDate != null">coreacctdate = #{coreAcctDate},</if>
+                <if test="msgType != null and msgType != ''">msgtype = #{msgType},</if>
+                <if test="msgId != null and msgId != ''">msgid = #{msgId},</if>
+                <if test="batchId != null and batchId != ''">batchid = #{batchId},</if>
+                <if test="payFlag != null and payFlag != ''">payflag = #{payFlag},</if>
+                <if test="instgDrctPty != null">instgdrctpty = #{instgDrctPty},</if>
+                <if test="dBITParty != null">dbitparty = #{dBITParty},</if>
+                <if test="payerWalletId != null">payerwalletid = #{payerWalletId},</if>
+                <if test="payeeAccount != null">payeraccount = #{payeeAccount},</if>
+                <if test="cRDTParty != null">crdtparty = #{cRDTParty},</if>
+                <if test="payeeName != null">payeename = #{payeeName},</if>
+                <if test="payeeAccount != null">payeeaccount = #{payeeAccount},</if>
+                <if test="payeeWalletId != null">payeewalletid = #{payeeWalletId},</if>
+                <if test="ccy != null and ccy != ''">ccy = #{ccy},</if>
+                <if test="amount != null and amount != ''">amount = #{amount},</if>
+                <if test="ognlMsgType != null">ognlmsgtype = #{ognlMsgType},</if>
+                <if test="ognlMsgId != null">ognlmsgid = #{ognlMsgId},</if>
+                <if test="tradeStatus != null">tradestatus = #{tradeStatus},</if>
+                <if test="coreStatus != null">corestatus = #{coreStatus},</if>
+                <if test="pathStatus != null">pathstatus = #{pathStatus},</if>
+                <if test="lastUpDate != null and lastUpDate != ''">lastupdate = #{lastUpDate},</if>
+                <if test="lastUpTime != null and lastUpTime != ''">lastuptime = #{lastUpTime},</if>
+            </trim>
+            where paydate = #{payDate}
+        when not matched then
+        insert(
+            PAYDATE, PAYSERNO, PAYTIME, COREACCTDATE, MSGTYPE, MSGID, BATCHID, PAYFLAG, INSTGDRCTPTY, DBITPARTY,
+            PAYERWALLETID, PAYERACCOUNT, CRDTPARTY, PAYEENAME, PAYEEACCOUNT, PAYEEWALLETID, CCY, AMOUNT, OGNLMSGTYPE,
+            OGNLMSGID, TRADESTATUS, CORESTATUS, PATHSTATUS, LASTUPDATE, LASTUPTIME)
+            VALUES(#{payDate}, #{paySerno}, #{payTime}, #{coreAcctDate}, #{msgType}, #{msgId}, #{batchId}, #{payFlag},
+            #{instgDrctPty}, #{dBITParty}, #{payerWalletId}, #{payerAccount}, #{cRDTParty},
+            #{payeeName}, #{payeeAccount}, #{payeeWalletId}, #{ccy}, #{amount}, #{ognlMsgType},
+            #{ognlMsgId}, #{tradeStatus}, #{coreStatus}, #{pathStatus}, #{lastUpDate}, #{lastUpTime})
+    </insert>
+
+    <!-- 查询对账明细采集表 -->
+    <select id="selectCheckCollect" resultType="com.example.justtest.domain.OfficialCheckCollectDO">
+        SELECT t.PAYDATE payDate,
+        t.PAYSERNO paySerno,
+        t.PAYTIME payTime,
+        t.COREACCTDATE coreAcctDate,
+        t.MSGTYPE msgType,
+        t.MSGID msgId,
+        t.BATCHID batchId,
+        t.PAYFLAG payFlag,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.DBITPARTY dBITParty,
+        t.PAYERWALLETID payerWalletId,
+        t.PAYERACCOUNT payerAccount,
+        t.CRDTPARTY cRDTParty,
+        t.PAYEENAME payeeName,
+        t.PAYEEACCOUNT payeeAccount,
+        t.PAYEEWALLETID payeeWalletId,
+        t.CCY ccy,
+        t.AMOUNT amount,
+        t.OGNLMSGTYPE ognlMsgType,
+        t.OGNLMSGID ognlMsgId,
+        t.TRADESTATUS tradeStatus,
+        t.CORESTATUS coreStatus,
+        t.PATHSTATUS pathStatus,
+        t.LASTUPDATE lastUpDate,
+        t.LASTUPTIME lastUpTime
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        where
+       t.PAYDATE=#{payDate}
+       and t.CRDTPARTY=#{crdtParty}
+    </select>
+
+    <!--查询汇总数据 -->
+    <!-- 查询通道对账汇总数据分交易 -->
+    <select id="selectCollectSumByMsgType" resultType="com.example.justtest.domain.CheckPathDO">
+        SELECT
+        t.BATCHID batchId,
+        t.PAYDATE payDate,
+        t.CRDTPARTY instdDrctPty,
+
+        t.MSGTYPE msgType,
+        t.CCY ccy,
+        case when t.TRADESTATUS in ('1', 'A') then 'PR00'
+        when t.TRADESTATUS in ('0', '3') then 'PR01'
+        else 'PR02'
+        end msgBizStatus,
+        count(1) msgCountNum,
+        <!--
+        sum(to_number(t.AMOUNT)) msgCountAmt,
+        -->
+        decode(substr(sum(to_number(t.AMOUNT)),1,1),'.','0'||sum(to_number(t.AMOUNT)),sum(to_number(t.AMOUNT))) msgCountAmt,
+        count(case when t.PAYFLAG = 'PAYER' then 1 else null end) msgDBITCountNum,
+        <!--
+        sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end) msgDBITCountAmt,
+        -->
+        decode(substr(sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end),1,1),'.','0'||sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end),sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end)) msgDBITCountAmt,
+
+        count(case when t.PAYFLAG = 'PAYEE' then 1 else null end) msgCRDTCountNum,
+        <!--
+        sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end) msgCRDTCountAmt
+        -->
+        decode(substr(sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end),1,1),'.','0'||sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end),sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end)) msgCRDTCountAmt
+
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        where 
+        t.PAYDATE=#{payDate}
+        and t.CRDTPARTY=#{crdtParty}
+        group by <!--t.BATCHID,-->
+        t.PAYDATE,
+        t.CRDTPARTY,
+        t.MSGTYPE, t.CCY, case when t.TRADESTATUS in ('1', 'A') then 'PR00'
+        when t.TRADESTATUS in ('0', '3') then 'PR01'
+        else 'PR02'
+        end
+    </select>
+    <!-- 查询通道对账汇总所有数据 -->
+    <select id="selectCollectSumTotal" resultType="com.example.justtest.domain.CheckPathDO">
+        SELECT
+        t.BATCHID batchId,
+        t.PAYDATE payDate,
+        t.CRDTPARTY instdDrctPty,
+        t.CCY ccy,
+        count(1) countNum,
+        <!--
+        sum(to_number(t.AMOUNT)) countAmt,
+        -->
+        decode(substr(sum(to_number(t.AMOUNT)),1,1),'.','0'||sum(to_number(t.AMOUNT)),sum(to_number(t.AMOUNT))) countAmt,
+        count(case when t.PAYFLAG = 'PAYER' then 1 else null end) dBITCountNum,
+        <!--
+        sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end) dBITCountAmt,
+        -->
+        decode(substr(sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end),1,1),'.','0'||sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end),sum(case when t.PAYFLAG = 'PAYER' then to_number(t.AMOUNT) else 0 end)) dBITCountAmt,
+        count(case when t.PAYFLAG = 'PAYEE' then 1 else null end) cRDTCountNum,
+        <!--
+        sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end) cRDTCountAmt
+        -->
+        decode(substr(sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end),1,1),'.','0'||sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end),sum(case when t.PAYFLAG = 'PAYEE' then to_number(t.AMOUNT) else 0 end)) cRDTCountAmt
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        where 
+        t.PAYDATE=#{payDate}
+        and t.CRDTPARTY=#{crdtParty}
+        group by
+        <!--t.BATCHID,-->
+        t.PAYDATE,
+        t.CRDTPARTY,
+        t.CCY
+    </select>
+
+    <!-- 查询金融交易登记表表 -->
+    <select id="selectPayTranstionDetailsByMsgId" resultType="com.example.justtest.domain.OfficialCheckCollectDO">
+        SELECT
+        t.TXN_DATE payDate,
+        t.INSTD_PARTY cRDTParty,
+        t.PAY_SERNO paySerno,
+        t.TXN_TIME payTime,
+        t.CORE_RSP_DATE COREACCTDATE,
+        t.TXN_TYPE msgType,
+        t.MSG_ID msgId,
+        t.BATCH_ID batchId,
+        <!--t.PAYFLAG payFlag,-->
+        t.INSTG_PARTY instgDrctPty,
+        t.PAYER_ACCT_PARTY_ID dBITParty,
+
+        t.PAYER_WALLET_ID payerWalletId,
+        t.PAYEE_WALLET_ID  payeeWalletId,
+
+        t.PAYER_ACCT_ID payerAccount,
+
+        t.PAYEE_ACCT_NAME payeeName,
+        t.PAYEE_ACCT_ID payeeAccount,
+
+        t.CURR_TYPE ccy,
+        t.AMOUNT amount,
+        <!-- t.ORIGMSGTYPE ognlMsgType,-->
+        t.ORI_PATH_REQ_SERNO ognlMsgId,
+        t.TRX_STATUS tradeStatus,
+        t.CORE_STATUS coreStatus,
+        t.PATH_STATUS pathStatus,
+        t.LAST_UP_DATE lastUpDate,
+        t.LAST_UP_TIME lastUpTime,
+        t.CORE_REQ_SERNO coreReqSerno
+        FROM OFFICIAL_WALLET_FINANCE_DTL t
+        where
+        t.TXN_DATE = #{payDate}
+        and t.INSTD_PARTY=#{crdtParty}
+        and t.PAYPATHSERNO in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <select id="selectPayTranstionDetailCount" resultType="int">
+        SELECT count(*)
+        FROM OFFICIAL_WALLET_FINANCE_DTL t
+        where t.TXN_DATE = #{payDate}
+        and t.TXN_TYPE in ('TO','TI')
+        and t.INSTD_PARTY=#{crdtParty}
+        <!--and t.MSG_ID  is not null-->
+    </select>
+
+    <!-- 查询金融交易登记表表 -->
+    <select id="intoFilePayTranstionDetails" resultType="com.example.justtest.domain.OfficialCheckCollectDO">
+        select * from
+        (SELECT
+        t.TXN_DATE payDate,
+        t.INSTD_PARTY cRDTParty,
+        t.PAY_SERNO paySerno,
+        t.TXN_TIME payTime,
+        t.CORE_RSP_DATE COREACCTDATE,
+        t.TXN_TYPE msgType,
+        t.MSG_ID msgId,
+        t.BATCH_ID batchId,
+        <!--t.PAYFLAG payFlag,-->
+        t.INSTG_PARTY instgDrctPty,
+        t.PAYER_ACCT_PARTY_ID dBITParty,
+
+        t.PAYER_WALLET_ID payerWalletId,
+        t.PAYEE_WALLET_ID  payeeWalletId,
+
+        t.PAYER_ACCT_ID payerAccount,
+
+        t.PAYEE_ACCT_NAME payeeName,
+        t.PAYEE_ACCT_ID payeeAccount,
+
+        t.CURR_TYPE ccy,
+        t.AMOUNT amount,
+        <!-- t.ORIGMSGTYPE ognlMsgType,-->
+        t.ORI_PATH_REQ_SERNO ognlMsgId,
+        t.TRX_STATUS tradeStatus,
+        t.CORE_STATUS coreStatus,
+        t.PATH_STATUS pathStatus,
+        t.LAST_UP_DATE lastUpDate,
+        t.LAST_UP_TIME lastUpTime,
+        t.CORE_REQ_SERNO coreReqSerno,
+        ROWNUM num
+        FROM OFFICIAL_WALLET_FINANCE_DTL t
+        where
+        <!--t.MSG_ID  is not null-->
+        t.TXN_DATE = #{payDate}
+        and t.INSTD_PARTY=#{crdtParty}
+        and t.TXN_TYPE in ('TO','TI')
+        order by t.TXN_DATE,t.PAY_SERNO
+        ) m
+        <if test="startrow != null">
+        <![CDATA[where m.num > #{startrow}]]>
+        </if>
+        <if test="endrow != null">
+            <![CDATA[AND m.num <= #{endrow}]]>
+        </if>
+        <!--
+        <if test="limit != null">
+            <if test="startNum != null">
+                and limit #{startNum}, #{limit}
+            </if>
+            <if test="startNum == null">
+                and rownum <![CDATA[ <= ]]> #{limit}
+            </if>
+        </if>
+
+        and outfile = #{fileName}
+        -->
+    </select>
+    
+    <!-- 查询我行有，人行没有的交易数据总数 -->
+    <select id="selectCollectWithPbocNotFoundCount" resultType="int">
+        SELECT count(*)
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        left join OFFICIAL_BATCH_CHECKPATHDTL b
+        on
+        t.CRDTPARTY = b.CRDTPARTY and  t.PAYDATE = b.WORKDATE
+        and t.MSGID = b.DTLMSGID
+        where
+
+        t.PAYDATE=#{payDate}
+        and t.CRDTPARTY=#{crdtParty}
+        and t.TRADESTATUS != '0' <!-- 当我行失败的情况时（状态为0，3），人行没有也算对平 -->
+        and t.TRADESTATUS != '3'
+        and not (t.TRADESTATUS = '2' and t.CORESTATUS = '9' and t.PATHSTATUS = '7')<!-- 排除掉297,297是初始化状态 -->
+        and b.DTLMSGID is null
+    </select>
+
+    <!-- 查询我行有，人行没有的交易数据 -->
+    <select id="selectCollectWithPbocNotFound" resultType="com.example.justtest.domain.CheckResultDO">
+        SELECT * from
+        (SELECT
+        t.PAYDATE payDate,
+        t.PAYSERNO paySerno,
+        t.PAYTIME payTime,
+        t.COREACCTDATE coreAcctDate,
+        t.MSGTYPE msgType,
+        t.MSGID msgId,
+        t.BATCHID batchId,
+        t.PAYFLAG payFlag,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.DBITPARTY dBITParty,
+        t.PAYERWALLETID payerWalletId,
+        t.PAYERACCOUNT payerAccount,
+        t.CRDTPARTY cRDTParty,
+        t.PAYEENAME payeeName,
+        t.PAYEEACCOUNT payeeAccount,
+        t.PAYEEWALLETID payeeWalletId,
+        t.CCY ccy,
+        t.AMOUNT amount,
+        t.OGNLMSGTYPE ognlMsgType,
+        t.OGNLMSGID ognlMsgId,
+        t.TRADESTATUS tradeStatus,
+        t.CORESTATUS coreStatus,
+        t.PATHSTATUS pathStatus,
+        'MORE' checkStatus,
+        'INIT' procStatus,
+        t.LASTUPDATE lastUpDate,
+        t.LASTUPTIME lastUpTime,
+        #{dataType} dataType,
+        ROWNUM num
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        left join OFFICIAL_BATCH_CHECKPATHDTL b
+        on <!--t.BATCHID = b.BATCHID-->
+        t.CRDTPARTY = b.CRDTPARTY and t.PAYDATE = b.WORKDATE
+        and t.MSGID = b.DTLMSGID
+        where
+
+        t.PAYDATE=#{payDate}
+        and t.CRDTPARTY=#{crdtParty}
+        and t.TRADESTATUS != '0' <!-- 当我行失败的情况时（状态为0，3），人行没有也算对平 -->
+        and t.TRADESTATUS != '3'
+        and not (t.TRADESTATUS = '2' and t.CORESTATUS = '9' and t.PATHSTATUS = '7')<!-- 排除掉297,297是初始化状态 -->
+        and b.DTLMSGID is null
+        order by t.PAYDATE,t.PAYSERNO) m
+        <if test="start != null and start != ''">
+            <![CDATA[where m.num > #{start} ]]>
+        </if>
+        <if test="end != null and end != ''">
+            <![CDATA[AND m.num <= #{end} ]]>
+        </if>
+        <!--
+        <if test="limit != null">
+            <if test="offset != null">
+                limit #{offset}, #{limit}
+            </if>
+            <if test="offset == null">
+                limit #{limit}
+            </if>
+        </if>
+        -->
+    </select>
+
+    <!-- 查询通道对账明细表中对账异常的数据总数 -->
+    <select id="selectPathDetailForNotMatchCount" resultType="int">
+        SELECT count(*)
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        inner join OFFICIAL_BATCH_CHECKPATHDTL b on <!--t.BATCHID = b.BATCHID-->
+        t.CRDTPARTY = b.CRDTPARTY and  t.PAYDATE = b.WORKDATE
+        and t.MSGID = b.DTLMSGID
+        where 
+        t.PAYDATE=#{payDate}
+       and t.CRDTPARTY=#{crdtParty}
+        and b.CHECKSTATUS != 'INIT'
+        and b.CHECKSTATUS != 'SAME'
+    </select>
+
+    <!-- 查询通道对账明细表中对账异常的数据 -->
+    <select id="selectPathDetailForNotMatch" resultType="com.example.justtest.domain.CheckResultDO">
+        SELECT * from
+        (SELECT
+        t.PAYDATE payDate,
+        t.PAYSERNO paySerno,
+        t.PAYTIME payTime,
+        t.COREACCTDATE coreAcctDate,
+        t.MSGTYPE msgType,
+        t.MSGID msgId,
+        t.BATCHID batchId,
+        t.PAYFLAG payFlag,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.DBITPARTY dBITParty,
+        t.PAYERWALLETID payerWalletId,
+        t.PAYERACCOUNT payerAccount,
+        t.CRDTPARTY cRDTParty,
+        t.PAYEENAME payeeName,
+        t.PAYEEACCOUNT payeeAccount,
+        t.PAYEEWALLETID payeeWalletId,
+        t.CCY ccy,
+        t.AMOUNT amount,
+        t.OGNLMSGTYPE ognlMsgType,
+        t.OGNLMSGID ognlMsgId,
+        t.TRADESTATUS tradeStatus,
+        t.CORESTATUS coreStatus,
+        t.PATHSTATUS pathStatus,
+        b.CHECKSTATUS checkStatus,
+        'INIT' procStatus,
+        t.LASTUPDATE lastUpDate,
+        t.LASTUPTIME lastUpTime,
+        #{dataType} dataType,
+        ROWNUM num
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        inner join OFFICIAL_BATCH_CHECKPATHDTL b on <!-- t.BATCHID = b.BATCHID -->
+        t.CRDTPARTY = b.CRDTPARTY and t.PAYDATE = b.WORKDATE
+        and t.MSGID = b.DTLMSGID
+        where t.PAYDATE=#{payDate}
+        and t.CRDTPARTY=#{crdtParty}
+        and b.CHECKSTATUS != 'INIT'
+        and b.CHECKSTATUS != 'SAME'
+        order by t.MSGID) m
+        <if test="start != null and start != ''">
+            <![CDATA[where m.num > #{start} ]]>
+        </if>
+        <if test="end != null and end != ''">
+            <![CDATA[AND m.num <= #{end} ]]>
+        </if>
+        <!--
+        <if test="limit != null">
+            <if test="offset != null">
+                limit #{offset}, #{limit}
+            </if>
+            <if test="offset == null">
+                limit #{limit}
+            </if>
+        </if>
+        -->
+    </select>
+
+    <!-- 查询通道对账明细表中对账结果数据 -->
+    <select id="selectPathDetailByMsgIdList" resultType="com.example.justtest.domain.CheckResultDO">
+        SELECT t.PAYDATE payDate,
+        t.PAYSERNO paySerno,
+        t.PAYTIME payTime,
+        t.COREACCTDATE coreAcctDate,
+        t.MSGTYPE msgType,
+        t.MSGID msgId,
+        t.BATCHID batchId,
+        t.PAYFLAG payFlag,
+        t.INSTGDRCTPTY instgDrctPty,
+        t.DBITPARTY dBITParty,
+        t.PAYERWALLETID payerWalletId,
+        t.PAYERACCOUNT payerAccount,
+        t.CRDTPARTY cRDTParty,
+        t.PAYEENAME payeeName,
+        t.PAYEEACCOUNT payeeAccount,
+        t.PAYEEWALLETID payeeWalletId,
+        t.CCY ccy,
+        t.AMOUNT amount,
+        t.OGNLMSGTYPE ognlMsgType,
+        t.OGNLMSGID ognlMsgId,
+        t.TRADESTATUS tradeStatus,
+        t.CORESTATUS coreStatus,
+        t.PATHSTATUS pathStatus,
+        b.CHECKSTATUS checkStatus,
+        'INIT' procStatus,
+        t.LASTUPDATE lastUpDate,
+        t.LASTUPTIME lastUpTime,
+        #{dataType} dataType
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        inner join OFFICIAL_BATCH_CHECKPATHDTL b on <!--t.BATCHID = b.BATCHID-->
+        t.CRDTPARTY = b.CRDTPARTY and  t.PAYDATE = b.WORKDATE
+        and t.MSGID = b.DTLMSGID
+        where t.PAYDATE=#{payDate}
+       and t.CRDTPARTY=#{crdtParty}
+        and t.MSGID in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- 查询对公金融交易登记表表 -->
+    <select id="selectCorporatePayTranstionDetailsByMsgId" resultType="com.example.justtest.domain.OfficialCheckCollectDO">
+        SELECT
+        t.TXN_DATE payDate,
+        t.INSTD_PARTY cRDTParty,
+        t.PAY_SERNO paySerno,
+        t.TXN_TIME payTime,
+        t.CORE_RSP_DATE COREACCTDATE,
+        t.TXN_TYPE msgType,
+        t.MSG_ID msgId,
+        t.BATCH_ID batchId,
+        <!--t.PAYFLAG payFlag,-->
+        t.INSTG_PARTY instgDrctPty,
+        t.PAYER_ACCT_PARTY_ID dBITParty,
+
+        t.PAYERWALLETID payerWalletId,
+        t.PAYEEWALLETID  payeeWalletId,
+
+        t.PAYERACCOUNT payerAccount,
+
+        t.PAYEENAME payeeName,
+        t.PAYEEACCOUNT payeeAccount,
+
+        t.CURR_TYPE ccy,
+        t.AMOUNT amount,
+        <!-- t.ORIGMSGTYPE ognlMsgType,-->
+        t.ORI_PATH_REQ_SERNO ognlMsgId,
+        t.TRX_STATUS tradeStatus,
+        t.CORE_STATUS coreStatus,
+        t.PATH_STATUS pathStatus,
+        t.LAST_UP_DATE lastUpDate,
+        t.LAST_UP_TIME lastUpTime,
+        t.CORE_REQ_SERNO coreReqSerno
+        FROM OFFICIAL_WALLET_FINANCE_DTL t
+        where
+        t.TXN_DATE = #{payDate}
+        and t.INSTD_PARTY=#{crdtParty}
+        and t.PAYPATHSERNO in
+        <foreach collection="list" item="item" index="index" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+
+    </select>
+
+    <select id="selectCorporatePayTranstionDetailCount" resultType="int">
+        SELECT count(*)
+        FROM OFFICIAL_WALLET_FINANCE_DTL t
+        where t.TXN_DATE = #{payDate}
+        and t.TXN_TYPE in ('TO','TI')
+        and t.INSTD_PARTY=#{crdtParty}
+        and t.MSG_ID  is not null
+    </select>
+
+    <!-- 查询对公金融交易登记表表 -->
+    <select id="intoCorporateFilePayTranstionDetails" resultType="com.example.justtest.domain.OfficialCheckCollectDO">
+        select * from
+        (SELECT
+        t.TXN_DATE payDate,
+        t.INSTD_PARTY cRDTParty,
+        t.PAY_SERNO paySerno,
+        t.TXN_TIME payTime,
+        t.CORE_RSP_DATE COREACCTDATE,
+        t.TXN_TYPE msgType,
+        t.MSG_ID msgId,
+        t.BATCH_ID batchId,
+        <!--t.PAYFLAG payFlag,-->
+        t.INSTG_PARTY instgDrctPty,
+        t.PAYER_ACCT_PARTY_ID dBITParty,
+
+        t.PAYER_WALLET_ID payerWalletId,
+        t.PAYEE_WALLET_ID  payeeWalletId,
+
+        t.PAYER_ACCT_ID payerAccount,
+
+        t.PAYEE_ACCT_NAME payeeName,
+        t.PAYEE_ACCT_ID payeeAccount,
+
+        t.CURR_TYPE ccy,
+        t.AMOUNT amount,
+        <!-- t.ORIGMSGTYPE ognlMsgType,-->
+        t.ORI_PATH_REQ_SERNO ognlMsgId,
+        t.TRX_STATUS tradeStatus,
+        t.CORE_STATUS coreStatus,
+        t.PATH_STATUS pathStatus,
+        t.LAST_UP_DATE lastUpDate,
+        t.LAST_UP_TIME lastUpTime,
+        t.CORE_REQ_SERNO coreReqSerno,
+        ROWNUM num
+        FROM OFFICIAL_WALLET_FINANCE_DTL t
+        where
+        t.MSG_ID  is not null
+        and t.TXN_DATE = #{payDate}
+        and t.INSTD_PARTY=#{crdtParty}
+        and t.TXN_TYPE in ('TO','TI')
+        <if test="endrow != null">
+            <![CDATA[AND ROWNUM <= #{endrow}]]>
+        </if>
+        )
+        <if test="startrow != null">
+            <![CDATA[where num > #{startrow}]]>
+        </if>
+    </select>
+
+    <select id="selectCheckCollectCatchCheckPathDetia" resultType="com.example.justtest.domain.CheckPathDetialDO">
+        SELECT t.PAYDATE payDate,
+               t.PAYSERNO paySerno,
+               t.PAYTIME payTime,
+               t.COREACCTDATE coreAcctDate,
+               t.MSGTYPE msgType,
+               t.MSGID msgId,
+               t.BATCHID batchId,
+               t.PAYFLAG payFlag,
+               t.INSTGDRCTPTY instgDrctPty,
+               t.DBITPARTY dBITParty,
+               t.PAYERWALLETID payerWalletId,
+               t.PAYERACCOUNT payerAccount,
+               t.CRDTPARTY cRDTParty,
+               t.PAYEENAME payeeName,
+               t.PAYEEACCOUNT payeeAccount,
+               t.PAYEEWALLETID payeeWalletId,
+               t.CCY ccy,
+               t.AMOUNT amount,
+               t.OGNLMSGTYPE ognlMsgType,
+               t.OGNLMSGID ognlMsgId,
+               t.TRADESTATUS tradeStatus,
+               t.CORESTATUS coreStatus,
+               t.PATHSTATUS pathStatus,
+               t.LASTUPDATE lastUpDate,
+               t.LASTUPTIME lastUpTime
+        FROM OFFICIAL_BATCH_CHECKCOLLECT t
+        where
+            t.PAYDATE=#{payDate}
+          and t.CRDTPARTY=#{crdtParty}
+    </select>
+</mapper>

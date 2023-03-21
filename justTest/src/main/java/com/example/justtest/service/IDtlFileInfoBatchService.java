@@ -2,6 +2,7 @@ package com.example.justtest.service;
 
 
 import com.example.justtest.domain.DtlFileInfDOPerson;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author 
  * @date 2021/1/7
  */
+@Mapper
 public interface IDtlFileInfoBatchService {
 
     /**
