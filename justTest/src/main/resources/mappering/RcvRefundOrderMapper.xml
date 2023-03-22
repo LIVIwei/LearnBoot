@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.justtest.mapper.RcvRefundOrderMapper">
+  <resultMap id="BaseResultMap" type="com.example.justtest.domain.rcv.RcvRefundOrder">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="mrch_id" jdbcType="VARCHAR" property="mrchId" />
+    <result column="inside_mrch_id" jdbcType="VARCHAR" property="insideMrchId" />
+    <result column="create_datetime" jdbcType="VARCHAR" property="createDatetime" />
+    <result column="modify_datetime" jdbcType="VARCHAR" property="modifyDatetime" />
+    <result column="txn_status" jdbcType="VARCHAR" property="txnStatus" />
+    <result column="txn_dt" jdbcType="VARCHAR" property="txnDt" />
+    <result column="txn_tm" jdbcType="VARCHAR" property="txnTm" />
+    <result column="txn_fcn_no" jdbcType="VARCHAR" property="txnFcnNo" />
+    <result column="origin_ordr_id" jdbcType="VARCHAR" property="originOrdrId" />
+    <result column="refund_ordr_id" jdbcType="VARCHAR" property="refundOrdrId" />
+    <result column="ahn_txn_amt" jdbcType="VARCHAR" property="ahnTxnAmt" />
+    <result column="txn_itm_dsc" jdbcType="VARCHAR" property="txnItmDsc" />
+    <result column="alrd_rfnd_amt" jdbcType="VARCHAR" property="alrdRfndAmt" />
+    <result column="ordr_amt" jdbcType="VARCHAR" property="ordrAmt" />
+    <result column="ordr_no" jdbcType="VARCHAR" property="ordrNo" />
+    <result column="sys_type" jdbcType="VARCHAR" property="sysType" />
+    <result column="trade_state" jdbcType="VARCHAR" property="tradeState" />
+    <result column="trade_state_dsc" jdbcType="VARCHAR" property="tradeStateDsc" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, mrch_id, inside_mrch_id, create_datetime, modify_datetime, txn_status, txn_dt,
+    txn_tm, txn_fcn_no, origin_ordr_id, refund_ordr_id, ahn_txn_amt, txn_itm_dsc, alrd_rfnd_amt,
+    ordr_amt, ordr_no, sys_type, trade_state, trade_state_dsc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_refund_order
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <select id="selectList" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_refund_order
+    <where>
+      <if test="mrchId != null">
+        and mrch_id = #{mrchId,jdbcType=VARCHAR}
+      </if>
+      <if test="insideMrchId != null">
+        and inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR}
+      </if>
+      <if test="createDatetime != null">
+        and create_datetime = #{createDatetime,jdbcType=VARCHAR}
+      </if>
+      <if test="modifyDatetime != null">
+        and modify_datetime = #{modifyDatetime,jdbcType=VARCHAR}
+      </if>
+      <if test="txnStatus != null">
+        and txn_status = #{txnStatus,jdbcType=VARCHAR}
+      </if>
+      <if test="txnDt != null">
+        and txn_dt = #{txnDt,jdbcType=VARCHAR}
+      </if>
+      <if test="txnTm != null">
+        and txn_tm = #{txnTm,jdbcType=VARCHAR}
+      </if>
+      <if test="txnFcnNo != null">
+        and txn_fcn_no = #{txnFcnNo,jdbcType=VARCHAR}
+      </if>
+      <if test="originOrdrId != null">
+        and origin_ordr_id = #{originOrdrId,jdbcType=VARCHAR}
+      </if>
+      <if test="refundOrdrId != null">
+        and refund_ordr_id = #{refundOrdrId,jdbcType=VARCHAR}
+      </if>
+      <if test="ahnTxnAmt != null">
+        and ahn_txn_amt = #{ahnTxnAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="txnItmDsc != null">
+        and txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR}
+      </if>
+      <if test="alrdRfndAmt != null">
+        and alrd_rfnd_amt = #{alrdRfndAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="ordrAmt != null">
+        and ordr_amt = #{ordrAmt,jdbcType=VARCHAR}
+      </if>
+      <if test="ordrNo != null">
+        and ordr_no = #{ordrNo,jdbcType=VARCHAR}
+      </if>
+      <if test="sysType != null">
+        and sys_type = #{sysType,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeState != null">
+        and trade_state = #{tradeState,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeStateDsc != null">
+        and trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR}
+      </if>
+    </where>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from rcv_refund_order
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder">
+    insert into rcv_refund_order (id, mrch_id, inside_mrch_id,
+                                  create_datetime, modify_datetime, txn_status,
+                                  txn_dt, txn_tm, txn_fcn_no,
+                                  origin_ordr_id, refund_ordr_id, ahn_txn_amt,
+                                  txn_itm_dsc, alrd_rfnd_amt, ordr_amt, ordr_no, sys_type, trade_state, trade_state_dsc)
+    values (#{id,jdbcType=VARCHAR}, #{mrchId,jdbcType=VARCHAR}, #{insideMrchId,jdbcType=VARCHAR},
+            #{createDatetime,jdbcType=VARCHAR}, #{modifyDatetime,jdbcType=VARCHAR}, #{txnStatus,jdbcType=VARCHAR},
+            #{txnDt,jdbcType=VARCHAR}, #{txnTm,jdbcType=VARCHAR}, #{txnFcnNo,jdbcType=VARCHAR},
+            #{originOrdrId,jdbcType=VARCHAR}, #{refundOrdrId,jdbcType=VARCHAR}, #{ahnTxnAmt,jdbcType=VARCHAR},
+            #{txnItmDsc,jdbcType=VARCHAR}, #{alrdRfndAmt,jdbcType=VARCHAR}, #{ordrAmt,jdbcType=VARCHAR},
+            #{ordrNo,jdbcType=VARCHAR}, #{sysType,jdbcType=VARCHAR}), #{tradeState,jdbcType=VARCHAR}), #{tradeStateDsc,jdbcType=VARCHAR}
+  </insert>
+
+
+  <insert id="insertSelective" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder">
+    insert into rcv_refund_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="mrchId != null">
+        mrch_id,
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id,
+      </if>
+      <if test="createDatetime != null">
+        create_datetime,
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime,
+      </if>
+      <if test="txnStatus != null">
+        txn_status,
+      </if>
+      <if test="txnDt != null">
+        txn_dt,
+      </if>
+      <if test="txnTm != null">
+        txn_tm,
+      </if>
+      <if test="txnFcnNo != null">
+        txn_fcn_no,
+      </if>
+      <if test="originOrdrId != null">
+        origin_ordr_id,
+      </if>
+      <if test="refundOrdrId != null">
+        refund_ordr_id,
+      </if>
+      <if test="ahnTxnAmt != null">
+        ahn_txn_amt,
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc,
+      </if>
+      <if test="alrdRfndAmt != null">
+        alrd_rfnd_amt,
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt,
+      </if>
+      <if test="ordrNo != null">
+        ordr_no,
+      </if>
+      <if test="sysType != null">
+        sys_type,
+      </if>
+      <if test="tradeState != null">
+        trade_state,
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="mrchId != null">
+        #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="txnFcnNo != null">
+        #{txnFcnNo,jdbcType=VARCHAR},
+      </if>
+      <if test="originOrdrId != null">
+        #{originOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundOrdrId != null">
+        #{refundOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ahnTxnAmt != null">
+        #{ahnTxnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="alrdRfndAmt != null">
+        #{alrdRfndAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrNo != null">
+        #{ordrNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+        #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder">
+    update rcv_refund_order
+    <set>
+      <if test="mrchId != null">
+        mrch_id = #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="txnFcnNo != null">
+        txn_fcn_no = #{txnFcnNo,jdbcType=VARCHAR},
+      </if>
+      <if test="originOrdrId != null">
+        origin_ordr_id = #{originOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundOrdrId != null">
+        refund_ordr_id = #{refundOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ahnTxnAmt != null">
+        ahn_txn_amt = #{ahnTxnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="alrdRfndAmt != null">
+        alrd_rfnd_amt = #{alrdRfndAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrNo != null">
+        ordr_no = #{ordrNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+        sys_type = #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        trade_state = #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKeySelective1" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder">
+    update rcv_refund_order
+    <set>
+      <if test="mrchId != null">
+        mrch_id = #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="txnFcnNo != null">
+        txn_fcn_no = #{txnFcnNo,jdbcType=VARCHAR},
+      </if>
+      <if test="originOrdrId != null">
+        origin_ordr_id = #{originOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundOrdrId != null">
+        refund_ordr_id = #{refundOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ahnTxnAmt != null">
+        ahn_txn_amt = #{ahnTxnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="alrdRfndAmt != null">
+        alrd_rfnd_amt = #{alrdRfndAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrNo != null">
+        ordr_no = #{ordrNo,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+        sys_type = #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        trade_state = #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder">
+    update rcv_refund_order
+    set mrch_id = #{mrchId,jdbcType=VARCHAR},
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+        txn_fcn_no = #{txnFcnNo,jdbcType=VARCHAR},
+        origin_ordr_id = #{originOrdrId,jdbcType=VARCHAR},
+        refund_ordr_id = #{refundOrdrId,jdbcType=VARCHAR},
+        ahn_txn_amt = #{ahnTxnAmt,jdbcType=VARCHAR},
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+        alrd_rfnd_amt = #{alrdRfndAmt,jdbcType=VARCHAR},
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+        ordr_no = #{ordrNo,jdbcType=VARCHAR},
+        sys_type = #{sysType,jdbcType=VARCHAR},
+        trade_state = #{tradeState,jdbcType=VARCHAR},
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByRefundId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_refund_order
+    where refund_ordr_id = #{refundId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByOrdrNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_refund_order
+    where ordr_no = #{orderNo,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectRecord" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_refund_order
+    <where>
+      mrch_id = #{mrchId,jdbcType=VARCHAR}
+      and id = #{rcvOrderId,jdbcType=VARCHAR}
+    </where>
+  </select>
+
+  <select id="selectByOrigMchtOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_refund_order
+    <where>
+      ORIGIN_ORDR_ID = #{origMchtOrderNo,jdbcType=VARCHAR}
+    </where>
+    order by create_datetime desc
+  </select>
+
+  <update id="updateByOrderNo" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder">
+    update rcv_refund_order
+    <set>
+      <if test="mrchId != null">
+        mrch_id = #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="txnFcnNo != null">
+        txn_fcn_no = #{txnFcnNo,jdbcType=VARCHAR},
+      </if>
+      <if test="originOrdrId != null">
+        origin_ordr_id = #{originOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="refundOrdrId != null">
+        refund_ordr_id = #{refundOrdrId,jdbcType=VARCHAR},
+      </if>
+      <if test="ahnTxnAmt != null">
+        ahn_txn_amt = #{ahnTxnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="alrdRfndAmt != null">
+        alrd_rfnd_amt = #{alrdRfndAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrNo != null">
+        ordr_no = #{ordrNo,jdbcType=VARCHAR}
+      </if>
+      <if test="sysType != null">
+        sys_type = #{sysType,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeState != null">
+        trade_state = #{tradeState,jdbcType=VARCHAR}
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR}
+      </if>
+    </set>
+    where ordr_no = #{ordrNo,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectRefundSumByOrigMchtOrderId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ORIGIN_ORDR_ID,
+    sum(to_number(nvl(ahn_txn_amt,0))) balance
+    from rcv_refund_order
+    where
+     ORIGIN_ORDR_ID = #{origMchtOrderNo,jdbcType=VARCHAR} and txn_status = 'N'
+    GROUP BY ORIGIN_ORDR_ID
+  </select>
+
+  <select id="selectRcvRefoudOrderInfoDOList" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder" resultMap="BaseResultMap">
+    select
+    id, mrch_id, inside_mrch_id, create_datetime, modify_datetime, txn_status, txn_dt,
+    txn_tm, txn_fcn_no, origin_ordr_id, refund_ordr_id, ahn_txn_amt, txn_itm_dsc, alrd_rfnd_amt,
+    ordr_amt, ordr_no, sys_type, trade_state, trade_state_dsc
+    from rcv_refund_order
+    <where>
+      <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> and txn_dt between #{beginDate} and #{endDate}</if>
+      <if test="minAhnTxnAmt != null  and minAhnTxnAmt != ''"><![CDATA[ and to_Number(ahn_txn_amt) >= to_Number(#{minAhnTxnAmt})]]></if>
+      <if test="maxAhnTxnAmt != null  and maxAhnTxnAmt != ''"><![CDATA[ and to_Number(ahn_txn_amt) <= to_Number(#{maxAhnTxnAmt})]]></if>
+      <if test="refundOrdrId != null and refundOrdrId != ''"> and refund_ordr_id = #{refundOrdrId}</if>
+      <if test="originOrdrId != null and originOrdrId != ''"> and origin_ordr_id = #{originOrdrId}</if>
+      <if test="txnStatus != null and txnStatus != ''"> and txn_status = #{txnStatus}</if>
+      <if test="sysType != null and sysType != ''"> and sys_type = #{sysType}</if>
+      <if test="mrchId != null and mrchId != ''"> and mrch_id = #{mrchId}</if>
+      <if test="txnDt != null  and txnDt != ''">and txn_dt = #{txnDt}</if>
+    </where>
+    order by txn_dt desc ,txn_tm desc
+  </select>
+
+  <select id="selectRcvOrderMrchIdList" parameterType="com.example.justtest.domain.rcv.RcvRefundOrder" resultMap="BaseResultMap">
+    select distinct mrch_id
+    from rcv_refund_order
+    <where>
+      <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> and txn_dt between #{beginDate} and #{endDate}</if>
+    </where>
+  </select>
+
+  <select id="selectRcvRefoudOrderInfoById" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from rcv_refund_order
+    where ID = #{id}
+  </select>
+
+  <select id="selectRcvRefundOrderinfoByReportDate" parameterType="String" resultType="com.example.justtest.domain.rcv.RcvMrchTradeReportDO">
+    select
+    txn_dt reportDate, mrch_id mrchId, sys_type sysType, count(id) refundNumber, sum(to_number(ahn_txn_amt)) refundAmount
+    from rcv_refund_order
+    where txn_dt = #{reportDate,jdbcType=VARCHAR}
+    group by txn_dt, mrch_id , sys_type
+
+  </select>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.justtest.mapper.RcvMrchTradeReportDOMapper">
+    
+    <resultMap type="com.example.justtest.domain.rcv.RcvMrchTradeReportDO" id="RcvMrchTradeReportDOResult">
+        <result column="report_date" jdbcType="VARCHAR" property="reportDate" />
+        <result column="txn_number" jdbcType="VARCHAR" property="txnNumber" />
+        <result column="txn_amount" jdbcType="VARCHAR" property="txnAmount" />
+        <result column="txn_success_number" jdbcType="VARCHAR" property="txnSuccessNumber" />
+        <result column="txn_success_amount" jdbcType="VARCHAR" property="txnSuccessAmount" />
+        <result column="refund_number" jdbcType="VARCHAR" property="refundNumber" />
+        <result column="refund_success_number" jdbcType="VARCHAR" property="refundSuccessNumber" />
+        <result column="refund_amount" jdbcType="VARCHAR" property="refundAmount" />
+        <result column="mrch_id" jdbcType="VARCHAR" property="mrchId" />
+        <result column="sys_type" jdbcType="VARCHAR" property="sysType" />
+    </resultMap>
+
+    <sql id="selectRcvMrchTradeReportDOVo">
+            select report_date,report_time, txn_number,
+            txn_amount, txn_success_number, txn_success_amount,
+            refund_number,refund_success_number, refund_amount, mrch_id, sys_type
+            from RCV_MRCH_TRADE_REPORT
+    </sql>
+
+        <select id="selectRcvMrchTradeReportDOList" parameterType="com.example.justtest.domain.rcv.RcvMrchTradeReportDO" resultMap="RcvMrchTradeReportDOResult">
+        <include refid="selectRcvMrchTradeReportDOVo"/>
+        <where>
+            <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> and report_date between #{beginDate} and #{endDate}</if>
+            <if test="mrchId != null and mrchId != ''"> and mrch_id = #{mrchId}</if>
+            <if test="sysType != null and sysType != ''"> and sys_type = #{sysType}</if>
+        </where>
+        order by report_date desc
+    </select>
+
+    <insert id="insertRcvMrchTradeReportDO" parameterType="com.example.justtest.domain.rcv.RcvMrchTradeReportDO">
+        insert into rcv_mrch_trade_report
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null">report_date,</if>
+            <if test="txnNumber != null">txn_number,</if>
+            <if test="txnAmount != null">txn_amount,</if>
+            <if test="txnSuccessNumber != null">txn_success_number,</if>
+            <if test="txnSuccessAmount != null">txn_success_amount,</if>
+            <if test="refundNumber != null">refund_number,</if>
+            <if test="refundSuccessNumber != null">refund_success_number,</if>
+            <if test="refundAmount != null">refund_amount,</if>
+            <if test="mrchId != null">mrch_id,</if>
+            <if test="sysType != null">sys_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="reportDate != null">#{reportDate},</if>
+            <if test="txnNumber != null">#{txnNumber},</if>
+            <if test="txnAmount != null">#{txnAmount},</if>
+            <if test="txnSuccessNumber != null">#{txnSuccessNumber},</if>
+            <if test="txnSuccessAmount != null">#{txnSuccessAmount},</if>
+            <if test="refundNumber != null">#{refundNumber},</if>
+            <if test="refundSuccessNumber != null">#{refundSuccessNumber},</if>
+            <if test="refundAmount != null">#{refundAmount},</if>
+            <if test="mrchId != null">#{mrchId},</if>
+            <if test="sysType != null">#{sysType},</if>
+        </trim>
+    </insert>
+</mapper>
