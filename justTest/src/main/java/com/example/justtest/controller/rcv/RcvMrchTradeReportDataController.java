@@ -19,7 +19,7 @@ public class RcvMrchTradeReportDataController {
      * 商户交易统计报表数据
      */
     @ExceptionHandler(value = Exception.class)
-    @PostMapping("/rcvmrchtradereport")
+    @GetMapping("/rcvmrchtradereport")
     public void rcvMrchTradeReport(@RequestParam("reportDate") String reportDate) throws Exception
     {
         try {
