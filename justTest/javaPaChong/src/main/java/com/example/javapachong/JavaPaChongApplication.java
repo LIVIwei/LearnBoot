@@ -1,13 +1,13 @@
-package com.example.justtest;
+package com.example.javapachong;
 
-// import com.example.justtest.annotation.EnableCustomConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JustTestApplication {
+public class JavaPaChongApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JustTestApplication.class, args);
+        SpringApplication.run(JavaPaChongApplication.class, args);
     }
+
 }

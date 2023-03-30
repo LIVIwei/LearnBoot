@@ -1,13 +1,15 @@
-package com.example.justtest;
+package com.example.livi;
 
-// import com.example.justtest.annotation.EnableCustomConfig;
+import com.example.livi.annotation.EnableCustomConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class JustTestApplication {
+@EnableCustomConfig
+public class LiviApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JustTestApplication.class, args);
+        SpringApplication.run(LiviApplication.class, args);
     }
+
 }

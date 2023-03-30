@@ -1,0 +1,721 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.livi.mapper.RcvOrderMapper">
+  <resultMap id="BaseResultMap" type="com.example.livi.domain.rcv.RcvOrder">
+    <id column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="mrch_id" jdbcType="VARCHAR" property="mrchId" />
+    <result column="inside_mrch_id" jdbcType="VARCHAR" property="insideMrchId" />
+    <result column="txn_type" jdbcType="VARCHAR" property="txnType" />
+    <result column="cntrprt_id" jdbcType="VARCHAR" property="cntrprtId" />
+    <result column="pos_id" jdbcType="VARCHAR" property="posId" />
+    <result column="ordr_amt" jdbcType="VARCHAR" property="ordrAmt" />
+    <result column="txn_amt" jdbcType="VARCHAR" property="txnAmt" />
+    <result column="cmdty_nm" jdbcType="VARCHAR" property="cmdtyNm" />
+    <result column="ordr_dtl" jdbcType="VARCHAR" property="ordrDtl" />
+    <result column="qrcode" jdbcType="VARCHAR" property="qrcode" />
+    <result column="txn_status" jdbcType="VARCHAR" property="txnStatus" />
+    <result column="txn_itm_dsc" jdbcType="VARCHAR" property="txnItmDsc" />
+    <result column="create_datetime" jdbcType="VARCHAR" property="createDatetime" />
+    <result column="modify_datetime" jdbcType="VARCHAR" property="modifyDatetime" />
+    <result column="txn_dt" jdbcType="VARCHAR" property="txnDt" />
+    <result column="txn_tm" jdbcType="VARCHAR" property="txnTm" />
+    <result column="invalid_date" jdbcType="DATE" property="invalidDate" />
+    <result column="check_remark" jdbcType="VARCHAR" property="checkRemark" />
+    <result column="order_no" jdbcType="VARCHAR" property="orderNo" />
+    <result column="trade_state" jdbcType="VARCHAR" property="tradeState" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="cash_currency" jdbcType="VARCHAR" property="cashCurrency" />
+    <result column="payer_info" jdbcType="VARCHAR" property="payerInfo" />
+    <result column="channel_flag" jdbcType="VARCHAR" property="channelFlag" />
+    <result column="sys_type" jdbcType="VARCHAR" property="sysType" />
+    <result column="pay_wallet_id" jdbcType="VARCHAR" property="payWalletId" />
+    <result column="pay_time" jdbcType="VARCHAR" property="payTime" />
+    <result column="trade_state_dsc" jdbcType="VARCHAR" property="tradeStateDsc" />
+  </resultMap>
+  <resultMap id="CustomResultMap" type="com.example.livi.entity.RcvOrderCustom" extends="BaseResultMap">
+    <result column="refundStatus" jdbcType="VARCHAR" property="refundStatus"/>
+  </resultMap>
+  <sql id="Base_Column_List">
+    order_id, mrch_id, inside_mrch_id, txn_type, cntrprt_id, pos_id, ordr_amt, txn_amt, cmdty_nm,
+    ordr_dtl, qrcode, txn_status, txn_itm_dsc, create_datetime, modify_datetime, txn_dt,
+    txn_tm, invalid_date, check_remark, order_no, trade_state, currency, cash_currency, payer_info,
+    channel_flag, sys_type, pay_wallet_id, pay_time, trade_state_dsc
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_order
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectByOrderNo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_order
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectList" parameterType="com.example.livi.domain.rcv.RcvOrder" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from rcv_order
+      <where>
+        <if test="orderId != null">
+          and order_id = #{orderId,jdbcType=VARCHAR}
+        </if>
+        <if test="mrchId != null">
+          and mrch_id = #{mrchId,jdbcType=VARCHAR}
+        </if>
+        <if test="insideMrchId != null">
+          and inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR}
+        </if>
+        <if test="txnType != null">
+          and txn_type = #{txnType,jdbcType=VARCHAR}
+        </if>
+        <if test="cntrprtId != null">
+          and cntrprt_id = #{cntrprtId,jdbcType=VARCHAR}
+        </if>
+        <if test="posId != null">
+          and pos_id = #{posId,jdbcType=VARCHAR}
+        </if>
+        <if test="ordrAmt != null">
+          and ordr_amt = #{ordrAmt,jdbcType=VARCHAR}
+        </if>
+        <if test="txnAmt != null">
+          and txn_amt = #{txnAmt,jdbcType=VARCHAR}
+        </if>
+        <if test="cmdtyNm != null">
+          and cmdty_nm = #{cmdtyNm,jdbcType=VARCHAR}
+        </if>
+        <if test="ordrDtl != null">
+          and ordr_dtl = #{ordrDtl,jdbcType=VARCHAR}
+        </if>
+        <if test="qrcode != null">
+          and qrcode = #{qrcode,jdbcType=VARCHAR}
+        </if>
+        <if test="txnStatus != null">
+          and txn_status = #{txnStatus,jdbcType=VARCHAR}
+        </if>
+        <if test="txnItmDsc != null">
+          and txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR}
+        </if>
+        <if test="createDatetime != null">
+          and create_datetime = #{createDatetime,jdbcType=VARCHAR}
+        </if>
+        <if test="modifyDatetime != null">
+          and modify_datetime = #{modifyDatetime,jdbcType=VARCHAR}
+        </if>
+        <if test="txnDt != null">
+          and txn_dt = #{txnDt,jdbcType=VARCHAR}
+        </if>
+        <if test="txnTm != null">
+          and txn_tm = #{txnTm,jdbcType=VARCHAR}
+        </if>
+        <if test="invalidDate != null">
+          and invalid_date = #{invalidDate,jdbcType=VARCHAR}
+        </if>
+        <if test="checkRemark != null">
+              and check_remark = #{checkRemark,jdbcType=VARCHAR}
+        </if>
+        <if test="orderNo != null">
+          and order_no = #{orderNo,jdbcType=VARCHAR}
+        </if>
+        <if test="tradeState != null">
+          and trade_state = #{tradeState,jdbcType=VARCHAR}
+        </if>
+        <if test="currency != null">
+          and currency = #{currency,jdbcType=VARCHAR}
+        </if>
+        <if test="cashCurrency != null">
+          and cash_currency = #{cashCurrency,jdbcType=VARCHAR}
+        </if>
+        <if test="payerInfo != null">
+          and payer_info = #{payerInfo,jdbcType=VARCHAR}
+        </if>
+        <if test="channelFlag != null">
+          and channel_flag = #{channelFlag,jdbcType=VARCHAR}
+        </if>
+        <if test="sysType != null">
+          and sys_type = #{sysType,jdbcType=VARCHAR}
+        </if>
+        <if test="payWalletId != null">
+          and pay_wallet_id = #{payWalletId,jdbcType=VARCHAR}
+        </if>
+        <if test="payTime != null">
+          and pay_time = #{payTime,jdbcType=VARCHAR}
+        </if>
+        <if test="tradeStateDsc != null">
+          and trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR}
+        </if>
+      </where>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from rcv_order
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.example.livi.domain.rcv.RcvOrder">
+    insert into rcv_order (order_id, mrch_id, inside_mrch_id, txn_type, cntrprt_id, pos_id,
+      ordr_amt, txn_amt, cmdty_nm, ordr_dtl, qrcode, txn_status, txn_itm_dsc, create_datetime,
+      modify_datetime, txn_dt, txn_tm, invalid_date, check_remark, order_no, trade_state, currency,
+      cash_currency, payer_info, channel_flag, sys_type, pay_wallet_id, pay_time, trade_state_dsc)
+    values (#{orderId,jdbcType=VARCHAR}, #{mrchId,jdbcType=VARCHAR}, #{insideMrchId,jdbcType=VARCHAR},
+      #{txnType,jdbcType=VARCHAR}, #{cntrprtId,jdbcType=VARCHAR}, #{posId,jdbcType=VARCHAR},
+      #{ordrAmt,jdbcType=VARCHAR}, #{txnAmt,jdbcType=VARCHAR}, #{cmdtyNm,jdbcType=VARCHAR}, #{ordrDtl,jdbcType=VARCHAR},
+      #{qrcode,jdbcType=VARCHAR}, #{txnStatus,jdbcType=VARCHAR}, #{txnItmDsc,jdbcType=VARCHAR},
+      #{createDatetime,jdbcType=VARCHAR}, #{modifyDatetime,jdbcType=VARCHAR}, #{txnDt,jdbcType=VARCHAR},
+      #{txnTm,jdbcType=VARCHAR}, #{invalidDate,jdbcType=DATE}, #{checkRemark,jdbcType=VARCHAR}, #{orderNo,jdbcType=VARCHAR},
+      #{tradeState,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{cashCurrency,jdbcType=VARCHAR}, #{payerInfo,jdbcType=VARCHAR},
+      #{channelFlag,jdbcType=VARCHAR},#{sysType,jdbcType=VARCHAR}, #{payWalletId,jdbcType=VARCHAR},#{payTime,jdbcType=VARCHAR},#{tradeStateDsc,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.livi.domain.rcv.RcvOrder">
+    insert into rcv_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="mrchId != null">
+        mrch_id,
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id,
+      </if>
+      <if test="txnType != null">
+        txn_type,
+      </if>
+      <if test="cntrprtId != null">
+        cntrprt_id,
+      </if>
+      <if test="posId != null">
+        pos_id,
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt,
+      </if>
+      <if test="txnAmt != null">
+        txn_amt,
+      </if>
+      <if test="cmdtyNm != null">
+        cmdty_nm,
+      </if>
+      <if test="ordrDtl != null">
+        ordr_dtl,
+      </if>
+      <if test="qrcode != null">
+        qrcode,
+      </if>
+      <if test="txnStatus != null">
+        txn_status,
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc,
+      </if>
+      <if test="createDatetime != null">
+        create_datetime,
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime,
+      </if>
+      <if test="txnDt != null">
+        txn_dt,
+      </if>
+      <if test="txnTm != null">
+        txn_tm,
+      </if>
+      <if test="invalidDate != null">
+        invalid_date,
+      </if>
+      <if test="checkRemark != null">
+        check_remark,
+      </if>
+      <if test="orderNo != null">
+        order_no,
+      </if>
+      <if test="tradeState != null">
+        trade_state,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="cashCurrency != null">
+        cash_currency,
+      </if>
+      <if test="payerInfo != null">
+        payer_info,
+      </if>
+      <if test="channelFlag != null">
+        channel_flag,
+      </if>
+      <if test="sysType != null">
+        sys_type,
+      </if>
+      <if test="payWalletId != null">
+        pay_wallet_id,
+      </if>
+      <if test="payTime != null">
+        pay_time,
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="mrchId != null">
+        #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="txnType != null">
+        #{txnType,jdbcType=VARCHAR},
+      </if>
+      <if test="cntrprtId != null">
+        #{cntrprtId,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null">
+        #{posId,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnAmt != null">
+        #{txnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="cmdtyNm != null">
+        #{cmdtyNm,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrDtl != null">
+        #{ordrDtl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidDate != null">
+        #{invalidDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="checkRemark != null">
+        #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="cashCurrency != null">
+        #{cashCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="payerInfo != null">
+        #{payerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelFlag != null">
+        #{channelFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+        #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="payWalletId != null">
+        #{payWalletId,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.livi.domain.rcv.RcvOrder">
+    update rcv_order
+    <set>
+      <if test="mrchId != null">
+        mrch_id = #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="txnType != null">
+        txn_type = #{txnType,jdbcType=VARCHAR},
+      </if>
+      <if test="cntrprtId != null">
+        cntrprt_id = #{cntrprtId,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null">
+        pos_id = #{posId,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnAmt != null">
+        txn_amt = #{txnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="cmdtyNm != null">
+        cmdty_nm = #{cmdtyNm,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrDtl != null">
+        ordr_dtl = #{ordrDtl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidDate != null">
+        invalid_date = #{invalidDate,jdbcType=DATE},
+      </if>
+      <if test="checkRemark != null">
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="orderNo != null">
+        order_no = #{orderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        trade_state = #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+         currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="cashCurrency != null">
+         cash_currency = #{cashCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="payerInfo != null">
+         payer_info = #{payerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelFlag != null">
+         channel_flag = #{channelFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+         sys_type = #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="payWalletId != null">
+        pay_wallet_id = #{payWalletId,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByOrderNoSelective" parameterType="com.example.livi.domain.rcv.RcvOrder">
+    update rcv_order
+    <set>
+      <if test="mrchId != null">
+        mrch_id = #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="txnType != null">
+        txn_type = #{txnType,jdbcType=VARCHAR},
+      </if>
+      <if test="cntrprtId != null">
+        cntrprt_id = #{cntrprtId,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null">
+        pos_id = #{posId,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnAmt != null">
+        txn_amt = #{txnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="cmdtyNm != null">
+        cmdty_nm = #{cmdtyNm,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrDtl != null">
+        ordr_dtl = #{ordrDtl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidDate != null">
+        invalid_date = #{invalidDate,jdbcType=DATE},
+      </if>
+      <if test="checkRemark != null">
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        trade_state = #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="cashCurrency != null">
+         cash_currency = #{cashCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="payerInfo != null">
+         payer_info = #{payerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelFlag != null">
+         channel_flag = #{channelFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+         sys_type = #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="payWalletId != null">
+        pay_wallet_id = #{payWalletId,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_no = #{orderNo,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByMerOrderNoSelective" parameterType="com.example.livi.domain.rcv.RcvOrder">
+    update rcv_order
+    <set>
+      <if test="mrchId != null">
+        mrch_id = #{mrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="insideMrchId != null">
+        inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      </if>
+      <if test="txnType != null">
+        txn_type = #{txnType,jdbcType=VARCHAR},
+      </if>
+      <if test="cntrprtId != null">
+        cntrprt_id = #{cntrprtId,jdbcType=VARCHAR},
+      </if>
+      <if test="posId != null">
+        pos_id = #{posId,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrAmt != null">
+        ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnAmt != null">
+        txn_amt = #{txnAmt,jdbcType=VARCHAR},
+      </if>
+      <if test="cmdtyNm != null">
+        cmdty_nm = #{cmdtyNm,jdbcType=VARCHAR},
+      </if>
+      <if test="ordrDtl != null">
+        ordr_dtl = #{ordrDtl,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="txnStatus != null">
+        txn_status = #{txnStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="txnItmDsc != null">
+        txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      </if>
+      <if test="createDatetime != null">
+        create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="modifyDatetime != null">
+        modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      </if>
+      <if test="txnDt != null">
+        txn_dt = #{txnDt,jdbcType=VARCHAR},
+      </if>
+      <if test="txnTm != null">
+        txn_tm = #{txnTm,jdbcType=VARCHAR},
+      </if>
+      <if test="invalidDate != null">
+        invalid_date = #{invalidDate,jdbcType=DATE},
+      </if>
+      <if test="checkRemark != null">
+        check_remark = #{checkRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeState != null">
+        trade_state = #{tradeState,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="cashCurrency != null">
+        cash_currency = #{cashCurrency,jdbcType=VARCHAR},
+      </if>
+      <if test="payerInfo != null">
+        payer_info = #{payerInfo,jdbcType=VARCHAR},
+      </if>
+      <if test="channelFlag != null">
+        channel_flag = #{channelFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="sysType != null">
+        sys_type = #{sysType,jdbcType=VARCHAR},
+      </if>
+      <if test="payWalletId != null">
+        pay_wallet_id = #{payWalletId,jdbcType=VARCHAR},
+      </if>
+      <if test="payTime != null">
+        pay_time = #{payTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tradeStateDsc != null">
+        trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.example.livi.domain.rcv.RcvOrder">
+    update rcv_order
+    set mrch_id = #{mrchId,jdbcType=VARCHAR},
+      inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR},
+      txn_type = #{txnType,jdbcType=VARCHAR},
+      cntrprt_id = #{cntrprtId,jdbcType=VARCHAR},
+      pos_id = #{posId,jdbcType=VARCHAR},
+      ordr_amt = #{ordrAmt,jdbcType=VARCHAR},
+      txn_amt = #{txnAmt,jdbcType=VARCHAR},
+      cmdty_nm = #{cmdtyNm,jdbcType=VARCHAR},
+      ordr_dtl = #{ordrDtl,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      txn_status = #{txnStatus,jdbcType=VARCHAR},
+      txn_itm_dsc = #{txnItmDsc,jdbcType=VARCHAR},
+      create_datetime = #{createDatetime,jdbcType=VARCHAR},
+      modify_datetime = #{modifyDatetime,jdbcType=VARCHAR},
+      txn_dt = #{txnDt,jdbcType=VARCHAR},
+      txn_tm = #{txnTm,jdbcType=VARCHAR},
+      invalid_date = #{invalidDate,jdbcType=DATE},
+      check_remark = #{checkRemark,jdbcType=VARCHAR},
+      order_no = #{orderNo,jdbcType=VARCHAR},
+      trade_state = #{tradeState,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      cash_currency = #{cashCurrency,jdbcType=VARCHAR},
+      payer_info = #{payerInfo,jdbcType=VARCHAR},
+      channel_flag = #{channelFlag,jdbcType=VARCHAR},
+      sys_type = #{sysType,jdbcType=VARCHAR},
+      pay_wallet_id = #{payWalletId,jdbcType=VARCHAR},
+      pay_time = #{payTime,jdbcType=VARCHAR},
+      trade_state_dsc = #{tradeStateDsc,jdbcType=VARCHAR}
+    where order_id = #{orderId,jdbcType=VARCHAR}
+  </update>
+  <select id="selectListWithRefundSts" parameterType="com.example.livi.domain.rcv.RcvOrder" resultMap="CustomResultMap">
+    select t.*, a.txn_status as refundStatus
+    from rcv_order t
+           left join
+         (
+           select *
+           from rcv_refund_order
+           where (origin_ordr_id, CREATE_DATETIME) in (
+             select origin_ordr_id, max(create_datetime) as latest
+             from rcv_refund_order GROUP BY origin_ordr_id)
+        )a
+           on t.order_id = a.origin_ordr_id
+           where t.inside_mrch_id = #{insideMrchId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectRecord" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from rcv_order
+    <where>
+      <if test="mrchId != null  and mrchId != ''"> and mrch_id = #{mrchId,jdbcType=VARCHAR}</if>
+      <if test="orderNo != null  and orderNo != ''"> and order_no = #{orderNo,jdbcType=VARCHAR}</if>
+      <if test="rcvOrderId != null  and rcvOrderId != ''"> and order_Id = #{rcvOrderId,jdbcType=VARCHAR}</if>
+    </where>
+  </select>
+
+  <select id="selectRcvOrderInfoDOList" parameterType="com.example.livi.domain.rcv.RcvOrder" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from rcv_order
+    <where>
+      <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> and txn_dt between #{beginDate} and #{endDate}</if>
+      <if test="minOrdrAmt != null  and minOrdrAmt != ''"><![CDATA[ and to_Number(ordr_amt) >= to_Number(#{minOrdrAmt})]]></if>
+      <if test="maxOrdrAmt != null  and maxOrdrAmt != ''"><![CDATA[ and to_Number(ordr_amt) <= to_Number(#{maxOrdrAmt})]]></if>
+      <if test="mrchId != null and mrchId != ''"> and mrch_id = #{mrchId}</if>
+      <if test="orderId != null and orderId != ''"> and order_id = #{orderId}</if>
+      <if test="orderNo != null and orderNo != ''"> and order_no = #{orderNo}</if>
+      <if test="payerInfo != null and payerInfo != ''"> and payer_info = #{payerInfo}</if>
+      <if test="txnType != null and txnType != ''"> and txn_type = #{txnType}</if>
+      <if test="txnStatus != null and txnStatus != ''"> and txn_status = #{txnStatus}</if>
+      <if test="sysType != null and sysType != ''"> and sys_type = #{sysType}</if>
+    </where>
+    order by txn_dt desc ,txn_tm desc
+  </select>
+
+  <select id="selectRcvOrderMrchIdList" parameterType="com.example.livi.domain.rcv.RcvOrder" resultMap="BaseResultMap">
+    select distinct mrch_id
+    from rcv_order
+    <where>
+      <if test="beginDate != null and beginDate != '' and endDate != null and endDate != ''"> and txn_dt between #{beginDate} and #{endDate}</if>
+    </where>
+  </select>
+
+  <select id="selectRcvOrderInfoById" parameterType="String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List"/>
+    from rcv_order
+    where ID = #{id}
+  </select>
+
+  <select id="selectRcvOrderinfoByReportDate" parameterType="String" resultType="com.example.livi.domain.rcv.RcvMrchTradeReportDO">
+    select
+    txn_dt reportDate, mrch_id mrchId, sys_type sysType, count(order_id) txnNumber, sum(to_number(ordr_amt)) txnAmount,
+    count(case when txn_status = 'N' then 1 else null end) txnSuccessNumber,
+    sum(case when txn_status = 'N' then to_number(ordr_amt) else 0 end) txnSuccessAmount
+    from rcv_order
+    where txn_dt = #{reportDate,jdbcType=VARCHAR}
+    group by txn_dt, mrch_id , sys_type
+  </select>
+
+</mapper>
